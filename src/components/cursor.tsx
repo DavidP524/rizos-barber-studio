@@ -3,10 +3,17 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Cursor() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
     const [isHovering, setIsHovering] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(true);
 
     useEffect(() => {
+        // Detect if it's a touch device using fine pointer media query
+        const isTouch = window.matchMedia("(pointer: coarse)").matches;
+        setIsTouchDevice(isTouch);
+
+        if (isTouch) return;
+
         const updateMousePosition = (e: MouseEvent) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
@@ -33,6 +40,8 @@ export default function Cursor() {
             window.removeEventListener("mouseover", handleMouseOver);
         };
     }, []);
+
+    if (isTouchDevice) return null;
 
     return (
         <>

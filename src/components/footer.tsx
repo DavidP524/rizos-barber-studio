@@ -25,10 +25,10 @@ export default function Footer() {
 
                 <div className="flex flex-col md:items-end md:text-right space-y-6">
                     <h4 className="font-serif text-2xl font-bold text-gold">Hours of Operation</h4>
-                    <ul className="text-foreground/70 space-y-4 font-light">
-                        <li className="grid grid-cols-10 md:grid-cols-[1fr_auto] gap-4"><span className="col-span-4 md:col-auto font-medium text-foreground">Monday - Friday</span> <span>9:00 AM - 7:00 PM</span></li>
-                        <li className="grid grid-cols-10 md:grid-cols-[1fr_auto] gap-4"><span className="col-span-4 md:col-auto font-medium text-foreground">Saturday</span> <span>9:00 AM - 5:00 PM</span></li>
-                        <li className="grid grid-cols-10 md:grid-cols-[1fr_auto] gap-4"><span className="col-span-4 md:col-auto font-medium text-gold">Sunday</span> <span className="text-gold">Appointments Only</span></li>
+                    <ul className="text-foreground/70 space-y-4 font-light w-full max-w-sm mx-auto md:mx-0">
+                        <li className="flex justify-between items-center border-b border-white/5 pb-2"><span className="font-medium text-foreground">Monday - Friday</span> <span>9:00 AM - 7:00 PM</span></li>
+                        <li className="flex justify-between items-center border-b border-white/5 pb-2"><span className="font-medium text-foreground">Saturday</span> <span>9:00 AM - 5:00 PM</span></li>
+                        <li className="flex justify-between items-center pb-2"><span className="font-medium text-gold">Sunday</span> <span className="text-gold">Appointments Only</span></li>
                     </ul>
                 </div>
             </div>
