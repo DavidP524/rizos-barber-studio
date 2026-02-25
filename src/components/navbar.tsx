@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -55,15 +56,23 @@ export default function Navbar() {
                 </div>
             </div>
             {/* Mobile Menu */}
-            {isOpen && (
-                <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-white/10 transition-all">
-                    <div className="px-4 pt-4 pb-8 space-y-4 text-center flex flex-col">
-                        <Link href="#services" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SERVICES</Link>
-                        <Link href="#gallery" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">GALLERY</Link>
-                        <Link href="#about" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">ABOUT</Link>
-                    </div>
-                </div>
-            )}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="md:hidden overflow-hidden"
+                    >
+                        <div className="px-4 pt-4 pb-8 space-y-4 text-center flex flex-col border-t border-white/5">
+                            <Link href="#services" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SERVICES</Link>
+                            <Link href="#gallery" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">GALLERY</Link>
+                            <Link href="#about" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">ABOUT</Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 }
