@@ -143,7 +143,7 @@ export default function Team() {
                             <img
                                 src={barber.image}
                                 alt={barber.name}
-                                className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
+                                className={`w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110 ${barber.name === "Nerick Sanchez" ? "scale-[1.03] object-[center_5%]" : "object-center group-hover:scale-105"}`}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 z-10"></div>
                             <div className="absolute bottom-4 left-4 z-20">
@@ -177,7 +177,7 @@ export default function Team() {
                             <img
                                 src={barber.image}
                                 alt={barber.name}
-                                className="w-full h-full object-cover object-center"
+                                className={`w-full h-full object-cover ${barber.name === "Nerick Sanchez" ? "scale-[1.03] object-[center_5%]" : "object-center"}`}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 z-10"></div>
                             <div className="absolute bottom-3 left-3 right-3 z-20">
