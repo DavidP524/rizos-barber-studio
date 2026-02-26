@@ -4,8 +4,9 @@ import Ticker from "@/components/ticker";
 import Experience from "@/components/experience";
 import Services from "@/components/services";
 import Gallery from "@/components/gallery";
-import About from "@/components/about";
 import Team from "@/components/team";
+import Reviews from "@/components/reviews";
+import About from "@/components/about";
 import Shop from "@/components/shop";
 import FAQ from "@/components/faq";
 import Footer from "@/components/footer";
@@ -19,8 +20,9 @@ export default function Home() {
       <Experience />
       <Services />
       <Gallery />
-      <About />
       <Team />
+      <Reviews />
+      <About />
       <Shop />
       <FAQ />
       <Footer />
