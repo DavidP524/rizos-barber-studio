@@ -94,9 +94,22 @@ export default function Team() {
     const [randomizedBarbers, setRandomizedBarbers] = useState(barbers);
 
     useEffect(() => {
-        // Create a copy of the array and shuffle it
-        const shuffled = [...barbers].sort(() => 0.5 - Math.random());
-        setRandomizedBarbers(shuffled);
+        // Extract Osvaldo and Moises
+        const osvaldo = barbers.find(b => b.name === "Osvaldo Rizo");
+        const moises = barbers.find(b => b.name === "Moises Rizo");
+
+        // Get the rest of the barbers and shuffle them
+        const rest = barbers.filter(b => b.name !== "Osvaldo Rizo" && b.name !== "Moises Rizo");
+        const shuffledRest = [...rest].sort(() => 0.5 - Math.random());
+
+        // Combine them, ensuring Osvaldo and Moises are always first and second
+        // (We know they exist in the array, so we can safely cast or just spread)
+        if (osvaldo && moises) {
+            setRandomizedBarbers([osvaldo, moises, ...shuffledRest]);
+        } else {
+            // Fallback just in case
+            setRandomizedBarbers([...barbers].sort(() => 0.5 - Math.random()));
+        }
     }, []);
 
     return (
