@@ -108,7 +108,7 @@ export default function Gallery() {
                 {images.map((src, idx) => (
                     <div
                         key={idx}
-                        className="min-w-[80%] sm:min-w-[65%] snap-center shrink-0 rounded-2xl overflow-hidden shadow-xl aspect-square border border-white/5 bg-zinc-900"
+                        className="min-w-[55%] sm:min-w-[42%] snap-center shrink-0 rounded-xl overflow-hidden shadow-xl aspect-[4/3] border border-white/5 bg-zinc-900"
                     >
                         <div className="relative w-full h-full overflow-hidden">
                             <img src={src} alt={`Rizos Studio Barbershop Work ${idx}`} className="w-full h-full object-cover object-center" />
