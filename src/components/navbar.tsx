@@ -44,6 +44,7 @@ export default function Navbar() {
                         <Link href="#services" className="hover:text-gold transition-colors">SERVICES</Link>
                         <Link href="#gallery" className="hover:text-gold transition-colors">GALLERY</Link>
                         <Link href="#about" className="hover:text-gold transition-colors">ABOUT</Link>
+                        <Link href="#team" className="hover:text-gold transition-colors">TEAM</Link>
                     </div>
                     <div className="hidden md:block">
                         <a href="https://getsquire.com/booking/book/rizos-barber-studio-dodge-city" target="_blank" rel="noopener noreferrer" className="bg-gold hover:bg-gold-hover text-background px-6 py-2.5 rounded-full font-semibold transition-colors shadow-lg shadow-gold/20">
@@ -69,6 +70,7 @@ export default function Navbar() {
                             <Link href="#services" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SERVICES</Link>
                             <Link href="#gallery" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">GALLERY</Link>
                             <Link href="#about" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">ABOUT</Link>
+                            <Link href="#team" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">TEAM</Link>
                         </div>
                     </motion.div>
                 )}
