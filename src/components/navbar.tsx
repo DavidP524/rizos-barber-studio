@@ -41,10 +41,12 @@ export default function Navbar() {
                         </span>
                     </Link>
                     <div className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-                        <Link href="#services" className="hover:text-gold transition-colors">SERVICES</Link>
-                        <Link href="#gallery" className="hover:text-gold transition-colors">GALLERY</Link>
-                        <Link href="#about" className="hover:text-gold transition-colors">ABOUT</Link>
-                        <Link href="#team" className="hover:text-gold transition-colors">TEAM</Link>
+                        <Link href="/#services" className="hover:text-gold transition-colors">SERVICES</Link>
+                        <Link href="/#gallery" className="hover:text-gold transition-colors">GALLERY</Link>
+                        <Link href="/#team" className="hover:text-gold transition-colors">TEAM</Link>
+                        <Link href="/about" className="hover:text-gold transition-colors">ABOUT</Link>
+                        <Link href="/shop" className="hover:text-gold transition-colors">SHOP</Link>
+                        <Link href="/faq" className="hover:text-gold transition-colors">FAQ</Link>
                     </div>
                     <div className="hidden md:block">
                         <a href="https://getsquire.com/booking/book/rizos-barber-studio-dodge-city" target="_blank" rel="noopener noreferrer" className="bg-gold hover:bg-gold-hover text-background px-6 py-2.5 rounded-full font-semibold transition-colors shadow-lg shadow-gold/20">
@@ -67,10 +69,12 @@ export default function Navbar() {
                         className="md:hidden overflow-hidden"
                     >
                         <div className="px-4 pt-4 pb-8 space-y-4 text-center flex flex-col border-t border-white/5">
-                            <Link href="#services" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SERVICES</Link>
-                            <Link href="#gallery" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">GALLERY</Link>
-                            <Link href="#about" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">ABOUT</Link>
-                            <Link href="#team" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">TEAM</Link>
+                            <Link href="/#services" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SERVICES</Link>
+                            <Link href="/#gallery" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">GALLERY</Link>
+                            <Link href="/#team" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">TEAM</Link>
+                            <Link href="/about" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">ABOUT</Link>
+                            <Link href="/shop" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">SHOP</Link>
+                            <Link href="/faq" onClick={() => setIsOpen(false)} className="block py-2 text-lg font-medium hover:text-gold">FAQ</Link>
                         </div>
                     </motion.div>
                 )}

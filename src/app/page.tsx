@@ -1,14 +1,10 @@
 import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import Ticker from "@/components/ticker";
-import Experience from "@/components/experience";
 import Services from "@/components/services";
 import Gallery from "@/components/gallery";
 import Team from "@/components/team";
 import Reviews from "@/components/reviews";
-import About from "@/components/about";
-import Shop from "@/components/shop";
-import FAQ from "@/components/faq";
 import Footer from "@/components/footer";
 
 export default function Home() {
@@ -17,14 +13,10 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Ticker />
-      <Experience />
       <Services />
       <Gallery />
       <Team />
       <Reviews />
-      <About />
-      <Shop />
-      <FAQ />
       <Footer />
     </main>
   );
