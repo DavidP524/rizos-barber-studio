@@ -2,80 +2,95 @@
 import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function Gallery() {
-    const images = [
-        "/Screenshot%202026-02-24%20214847.png",
-        "/Screenshot%202026-02-24%20214910.png",
-        "/Screenshot%202026-02-24%20214932.png",
-        "/Screenshot%202026-02-24%20214954.png",
-        "/Screenshot%202026-02-24%20215018.png",
-        "/Screenshot%202026-02-24%20215059.png"
-    ];
+const images = [
+    "/Screenshot%202026-02-24%20214847.png",
+    "/Screenshot%202026-02-24%20214910.png",
+    "/Screenshot%202026-02-24%20214932.png",
+    "/Screenshot%202026-02-24%20214954.png",
+    "/Screenshot%202026-02-24%20215018.png",
+    "/Screenshot%202026-02-24%20215059.png",
+];
 
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const animationRef = useRef<number | null>(null);
-    const isUserScrolling = useRef(false);
-    const userScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+export default function Gallery() {
+    const trackRef = useRef<HTMLDivElement>(null);
+    const isUserInteracting = useRef(false);
+    const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const rafId = useRef<number | null>(null);
 
     useEffect(() => {
-        const container = scrollRef.current;
-        if (!container) return;
+        const track = trackRef.current;
+        if (!track) return;
 
-        // Only auto-scroll on mobile
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
-        if (!isMobile) return;
+        const CARD_W = 160; // px — matches the w-[160px] on each card
+        const GAP = 12;     // px — matches gap-3
 
-        const speed = 0.5; // pixels per frame
+        // Clone cards so it loops seamlessly
+        const original = Array.from(track.children) as HTMLElement[];
+        original.forEach((child) => {
+            const clone = child.cloneNode(true) as HTMLElement;
+            clone.setAttribute("aria-hidden", "true");
+            track.appendChild(clone);
+        });
 
-        const autoScroll = () => {
-            if (!isUserScrolling.current && container) {
-                container.scrollLeft += speed;
+        const TOTAL = (CARD_W + GAP) * original.length;
+        let pos = 0;
 
-                // Reset to start when we reach the end
-                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
-                    container.scrollLeft = 0;
-                }
+        const tick = () => {
+            if (!isUserInteracting.current) {
+                pos += 0.4; // slow drift speed
+                if (pos >= TOTAL) pos -= TOTAL; // seamless loop
+                track.style.transform = `translateX(-${pos}px)`;
             }
-            animationRef.current = requestAnimationFrame(autoScroll);
+            rafId.current = requestAnimationFrame(tick);
         };
 
-        // Pause auto-scroll when user touches/scrolls
-        const handleTouchStart = () => {
-            isUserScrolling.current = true;
-            if (userScrollTimeout.current) clearTimeout(userScrollTimeout.current);
+        rafId.current = requestAnimationFrame(tick);
+
+        const pause = () => {
+            isUserInteracting.current = true;
+            if (resumeTimer.current) clearTimeout(resumeTimer.current);
+        };
+        const resume = () => {
+            resumeTimer.current = setTimeout(() => {
+                isUserInteracting.current = false;
+            }, 2500);
         };
 
-        const handleTouchEnd = () => {
-            // Resume auto-scroll after 3 seconds of inactivity
-            userScrollTimeout.current = setTimeout(() => {
-                isUserScrolling.current = false;
-            }, 3000);
-        };
-
-        container.addEventListener("touchstart", handleTouchStart, { passive: true });
-        container.addEventListener("touchend", handleTouchEnd, { passive: true });
-
-        animationRef.current = requestAnimationFrame(autoScroll);
+        track.parentElement?.addEventListener("touchstart", pause, { passive: true });
+        track.parentElement?.addEventListener("touchend", resume, { passive: true });
+        track.parentElement?.addEventListener("mousedown", pause, { passive: true });
+        track.parentElement?.addEventListener("mouseup", resume, { passive: true });
 
         return () => {
-            if (animationRef.current) cancelAnimationFrame(animationRef.current);
-            if (userScrollTimeout.current) clearTimeout(userScrollTimeout.current);
-            container.removeEventListener("touchstart", handleTouchStart);
-            container.removeEventListener("touchend", handleTouchEnd);
+            if (rafId.current) cancelAnimationFrame(rafId.current);
+            if (resumeTimer.current) clearTimeout(resumeTimer.current);
+            track.parentElement?.removeEventListener("touchstart", pause);
+            track.parentElement?.removeEventListener("touchend", resume);
+            track.parentElement?.removeEventListener("mousedown", pause);
+            track.parentElement?.removeEventListener("mouseup", resume);
         };
     }, []);
 
     return (
-        <section id="gallery" className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
-            <div className="text-center mb-16">
+        <section id="gallery" className="py-24 overflow-hidden">
+            {/* Header */}
+            <div className="text-center mb-16 px-6">
                 <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">Latest Work</h2>
                 <p className="text-foreground/70 max-w-xl mx-auto">
-                    Follow us on Instagram <a href="https://www.instagram.com/rizosbarberstudio/" target="_blank" rel="noopener noreferrer" className="text-gold font-medium hover:underline">@rizosbarberstudio</a>
+                    Follow us on Instagram{" "}
+                    <a
+                        href="https://www.instagram.com/rizosbarberstudio/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gold font-medium hover:underline"
+                    >
+                        @rizosbarberstudio
+                    </a>
                 </p>
             </div>
 
-            {/* Desktop Grid Layout */}
-            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* ── Desktop: static 3-col grid ── */}
+            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 px-6 max-w-7xl mx-auto">
                 {images.map((src, idx) => (
                     <motion.div
                         key={idx}
@@ -86,49 +101,51 @@ export default function Gallery() {
                         viewport={{ once: true, margin: "-50px" }}
                     >
                         <div className="relative group w-full h-full overflow-hidden">
-                            <img src={src} alt={`Rizos Studio Barbershop Work ${idx}`} className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-110" />
+                            <img
+                                src={src}
+                                alt={`Rizos Studio Work ${idx + 1}`}
+                                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                            />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                                <span className="text-gold font-serif text-lg italic tracking-wider drop-shadow-md">View Craft</span>
+                                <span className="text-gold font-serif text-lg italic tracking-wider">View Craft</span>
                             </div>
                         </div>
                     </motion.div>
                 ))}
             </div>
 
-            {/* Mobile Horizontal Auto-Scroll */}
+            {/* ── Mobile: auto-scrolling ticker ── */}
+            {/* Outer mask hides overflow */}
             <div
-                ref={scrollRef}
-                className="md:hidden flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 snap-x snap-mandatory"
-                style={{
-                    scrollbarWidth: "none",
-                    msOverflowStyle: "none",
-                    WebkitOverflowScrolling: "touch",
-                }}
+                className="md:hidden relative overflow-hidden w-full cursor-grab active:cursor-grabbing"
+                style={{ maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)" }}
             >
-                {images.map((src, idx) => (
-                    <div
-                        key={idx}
-                        className="min-w-[40%] snap-center shrink-0 rounded-xl overflow-hidden shadow-xl aspect-[3/2] border border-white/5 bg-zinc-900"
-                    >
-                        <div className="relative w-full h-full overflow-hidden">
-                            <img src={src} alt={`Rizos Studio Barbershop Work ${idx}`} className="w-full h-full object-cover object-center" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                {/* Moving track — width set by JS cloning */}
+                <div
+                    ref={trackRef}
+                    className="flex gap-3 will-change-transform"
+                    style={{ width: "max-content" }}
+                >
+                    {images.map((src, idx) => (
+                        <div
+                            key={idx}
+                            className="w-[160px] h-[160px] shrink-0 rounded-xl overflow-hidden border border-white/10 bg-zinc-900 shadow-lg"
+                        >
+                            <img
+                                src={src}
+                                alt={`Rizos Studio Work ${idx + 1}`}
+                                className="w-full h-full object-cover object-center"
+                                draggable={false}
+                            />
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
-            {/* Scroll indicator dots for mobile */}
-            <div className="md:hidden flex justify-center gap-2 mt-6">
-                <p className="text-foreground/40 text-xs tracking-widest uppercase">Swipe to explore</p>
-            </div>
-
-            {/* Hide scrollbar CSS */}
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
-            `}</style>
+            {/* Swipe hint */}
+            <p className="md:hidden text-center text-foreground/40 text-xs tracking-widest uppercase mt-5">
+                Touch to pause · swipe to explore
+            </p>
         </section>
     );
 }
