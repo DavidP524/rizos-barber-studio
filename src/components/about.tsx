@@ -38,7 +38,7 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div className="relative h-[600px] w-full rounded-2xl overflow-hidden border border-white/5 shadow-[0_0_40px_rgba(212,175,55,0.08)] group order-last md:order-first">
                     <img
-                        src="/owner.png"
+                        src="/osvaldo.rizo.jpg"
                         alt="Osvaldo Rizo"
                         className="w-full h-full object-cover object-top transform transition-transform duration-700"
                     />

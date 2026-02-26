@@ -153,50 +153,39 @@ export default function Team() {
                 ))}
             </div>
 
-            {/* Mobile Carousel Layout */}
-            <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-6 px-6 scrollbar-hide">
+            {/* Mobile / Tablet Grid Layout (2 columns) */}
+            <div className="grid md:hidden grid-cols-2 gap-3 sm:gap-4">
                 {randomizedBarbers.map((barber, idx) => (
                     <div
-                        key={idx}
-                        className="min-w-[85%] sm:min-w-[45%] snap-center shrink-0 bg-zinc-900/60 border border-white/5 rounded-2xl overflow-hidden flex flex-col h-full shadow-xl"
+                        key={`mobile-${idx}`}
+                        className="bg-zinc-900/60 border border-white/5 rounded-xl overflow-hidden shadow-lg flex flex-col h-full"
                     >
-                        <div className="relative w-full aspect-[3/4] overflow-hidden bg-black/50">
+                        <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/50">
                             <img
                                 src={barber.image}
                                 alt={barber.name}
                                 className="w-full h-full object-cover object-center"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 z-10"></div>
-                            <div className="absolute bottom-4 left-4 z-20">
-                                <h4 className="font-serif text-2xl font-bold text-white drop-shadow-lg leading-tight">{barber.name}</h4>
-                                <p className="text-gold text-sm font-medium tracking-widest uppercase mt-1 drop-shadow-md">{barber.role}</p>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 z-10"></div>
+                            <div className="absolute bottom-3 left-3 right-3 z-20">
+                                <h4 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md leading-tight truncate">{barber.name}</h4>
+                                <p className="text-gold text-[10px] sm:text-xs font-semibold tracking-wider uppercase mt-0.5 drop-shadow truncate">{barber.role}</p>
                             </div>
                         </div>
-                        <div className="p-5 flex-1 flex flex-col justify-end bg-black">
+                        <div className="p-3 flex-1 flex flex-col justify-end bg-black">
                             <a
                                 href={barber.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-gold hover:text-black text-white px-4 py-3 rounded-full font-semibold transition-all duration-300 border border-white/10"
+                                className="w-full flex items-center justify-center gap-1.5 bg-white/5 active:bg-gold active:text-black text-white px-2 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors border border-white/10"
                             >
-                                Book {barber.name.split(" ")[0]}
-                                <ExternalLink size={16} />
+                                Book <span className="hidden sm:inline">{barber.name.split(" ")[0]}</span>
+                                <ExternalLink size={14} />
                             </a>
                         </div>
                     </div>
                 ))}
             </div>
-
-            {/* Custom Styles for Scrollbar Hiding */}
-            <style jsx>{`
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-            `}</style>
         </section>
     );
 }
