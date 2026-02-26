@@ -13,7 +13,6 @@ const images = [
 
 export default function Gallery() {
     const trackRef = useRef<HTMLDivElement>(null);
-    const isUserInteracting = useRef(false);
     const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const rafId = useRef<number | null>(null);
 
@@ -21,10 +20,10 @@ export default function Gallery() {
         const track = trackRef.current;
         if (!track) return;
 
-        const CARD_W = 160; // px — matches the w-[160px] on each card
-        const GAP = 12;     // px — matches gap-3
+        const CARD_W = 160;
+        const GAP = 12;
 
-        // Clone cards so it loops seamlessly
+        // Clone cards for seamless looping
         const original = Array.from(track.children) as HTMLElement[];
         original.forEach((child) => {
             const clone = child.cloneNode(true) as HTMLElement;
@@ -34,40 +33,57 @@ export default function Gallery() {
 
         const TOTAL = (CARD_W + GAP) * original.length;
         let pos = 0;
+        let touchStartX = 0;
+        let isDragging = false;
 
+        // Animation loop
         const tick = () => {
-            if (!isUserInteracting.current) {
-                pos += 0.4; // slow drift speed
-                if (pos >= TOTAL) pos -= TOTAL; // seamless loop
+            if (!isDragging) {
+                pos += 0.4;
+                if (pos >= TOTAL) pos -= TOTAL;
                 track.style.transform = `translateX(-${pos}px)`;
             }
             rafId.current = requestAnimationFrame(tick);
         };
-
         rafId.current = requestAnimationFrame(tick);
 
-        const pause = () => {
-            isUserInteracting.current = true;
+        // Touch handlers — allow dragging
+        const onTouchStart = (e: TouchEvent) => {
+            touchStartX = e.touches[0].clientX;
+            isDragging = true;
             if (resumeTimer.current) clearTimeout(resumeTimer.current);
         };
-        const resume = () => {
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (!isDragging) return;
+            const dx = touchStartX - e.touches[0].clientX;
+            touchStartX = e.touches[0].clientX;
+            pos += dx;
+            // Keep pos in bounds for seamless loop
+            if (pos < 0) pos += TOTAL;
+            if (pos >= TOTAL) pos -= TOTAL;
+            track.style.transform = `translateX(-${pos}px)`;
+        };
+
+        const onTouchEnd = () => {
+            isDragging = false;
+            // Resume auto-drift after 2.5s
             resumeTimer.current = setTimeout(() => {
-                isUserInteracting.current = false;
+                isDragging = false;
             }, 2500);
         };
 
-        track.parentElement?.addEventListener("touchstart", pause, { passive: true });
-        track.parentElement?.addEventListener("touchend", resume, { passive: true });
-        track.parentElement?.addEventListener("mousedown", pause, { passive: true });
-        track.parentElement?.addEventListener("mouseup", resume, { passive: true });
+        const wrapper = track.parentElement;
+        wrapper?.addEventListener("touchstart", onTouchStart, { passive: true });
+        wrapper?.addEventListener("touchmove", onTouchMove, { passive: true });
+        wrapper?.addEventListener("touchend", onTouchEnd, { passive: true });
 
         return () => {
             if (rafId.current) cancelAnimationFrame(rafId.current);
             if (resumeTimer.current) clearTimeout(resumeTimer.current);
-            track.parentElement?.removeEventListener("touchstart", pause);
-            track.parentElement?.removeEventListener("touchend", resume);
-            track.parentElement?.removeEventListener("mousedown", pause);
-            track.parentElement?.removeEventListener("mouseup", resume);
+            wrapper?.removeEventListener("touchstart", onTouchStart);
+            wrapper?.removeEventListener("touchmove", onTouchMove);
+            wrapper?.removeEventListener("touchend", onTouchEnd);
         };
     }, []);
 
